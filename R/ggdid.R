@@ -31,7 +31,9 @@ ggdid <- function(object, ...) {
 #'  the same across different plots
 #' @param xlab optional x-axis label
 #' @param ylab optional y-axis label
+#' @param lab_size optional label font size
 #' @param title optional plot title
+#' @param cap_text optional plot caption (per plot)
 #' @param xgap optional gap between the labels on the x-axis.  For example,
 #'  `xgap=3` indicates that the labels should show up for every third
 #'  value on the x-axis.  The default is 1.
@@ -45,13 +47,15 @@ ggdid <- function(object, ...) {
 #'   intervals to 0. Set to NULL to omit.
 #' @param theming Set to FALSE to skip all theming so you can do it yourself.
 #' @param grtitle Title to append before each group name (`ggdid.MP` only).
-#'
+#' 
 #' @export
 ggdid.MP <- function(object,
                      ylim=NULL,
                      xlab=NULL,
                      ylab=NULL,
+                     lab_size=10,
                      title="Group",
+                     cap_text=NULL,
                      xgap=1,
                      ncol=1,
                      legend=TRUE,
@@ -88,7 +92,7 @@ ggdid.MP <- function(object,
   }
 
   mplots <- gplot(results[results$group %in% group,],
-                  ylim, xlab, ylab, title, xgap,
+                  ylim, xlab, ylab, lab_size, title, cap_text, xgap,
                   legend, ref_line, theming) +
     facet_wrap(~grtitle, ncol = ncol, scales = 'free')
 
@@ -107,7 +111,9 @@ ggdid.AGGTEobj <- function(object,
                            ylim=NULL,
                            xlab=NULL,
                            ylab=NULL,
+                           lab_size=10,
                            title="",
+                           cap_text=NULL,
                            xgap=1,
                            legend=TRUE,
                            ref_line = 0,
@@ -132,9 +138,9 @@ ggdid.AGGTEobj <- function(object,
 
   if (object$type == "group") {
     # alternative plot if selective/group treatment timing plot
-    p <- splot(results, ylim, xlab, ylab, title, legend, ref_line, theming)
+    p <- splot(results, ylim, xlab, ylab, lab_size, title, cap_text, legend, ref_line, theming)
   } else {
-    p <- gplot(results, ylim, xlab, ylab, title, xgap, legend, ref_line, theming)
+    p <- gplot(results, ylim, xlab, ylab, lab_size, title, cap_text, xgap, legend, ref_line, theming)
   }
 
   p

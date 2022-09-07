@@ -11,7 +11,7 @@
 #' @keywords internal
 #'
 #' @export
-gplot <- function(ssresults, ylim=NULL, xlab=NULL, ylab=NULL, title="Group", xgap=1,
+gplot <- function(ssresults, ylim=NULL, xlab=NULL, ylab=NULL, lab_size=10, title="Group", cap_text=NULL, xgap=1,
                   legend=TRUE, ref_line = 0, theming = TRUE) {
   dabreaks <- ssresults$year[seq(1, length(ssresults$year), xgap)]
 
@@ -28,7 +28,7 @@ gplot <- function(ssresults, ylim=NULL, xlab=NULL, ylab=NULL, title="Group", xga
     #scale_x_discrete(breaks=dabreaks, labels=as.character(dabreaks)) +
     scale_x_continuous(breaks=as.numeric(dabreaks), labels=as.character(dabreaks)) +
     scale_color_manual(drop=FALSE, values=c("#e87d72","#56bcc2"), breaks = c(0, 1), labels = c('Pre','Post')) +
-    labs(x = xlab, y = ylab, title = title, color = NULL)
+    labs(x = xlab, y = ylab, title = title, caption = cap_text, color = NULL)
 
   if (!is.null(ref_line)) {
     p <- p + geom_hline(aes(yintercept = ref_line), linetype = 'dashed')
@@ -39,7 +39,9 @@ gplot <- function(ssresults, ylim=NULL, xlab=NULL, ylab=NULL, title="Group", xga
             axis.title = element_text(color="darkgray", face="bold", size=12),
             strip.background = element_rect(fill = 'white', color = 'white'),
             strip.text = element_text(color = 'darkgray', face = 'bold', size = 12, hjust = 0),
-            legend.position = 'bottom')
+            legend.position = 'bottom',
+            axis.text = element_text(size=lab_size)) + 
+            theme(plot.caption = element_text(hjust=0.5))
   }
   if (!legend) {
     p  <- p + ggpubr::rremove("legend")
@@ -62,7 +64,7 @@ gplot <- function(ssresults, ylim=NULL, xlab=NULL, ylab=NULL, title="Group", xga
 #' @keywords internal
 #'
 #' @export
-splot <- function(ssresults, ylim=NULL, xlab=NULL, ylab=NULL, title="Group",
+splot <- function(ssresults, ylim=NULL, xlab=NULL, ylab=NULL, lab_size=10, title="Group", cap_text=NULL,
                   legend=TRUE, ref_line = 0, theming = TRUE) {
 
   # names of variables are "weird" for this function because this code builds
@@ -88,7 +90,7 @@ splot <- function(ssresults, ylim=NULL, xlab=NULL, ylab=NULL, title="Group",
     #scale_x_discrete(breaks=dabreaks, labels=as.character(dabreaks)) +
     scale_x_continuous(limits=ylim) +
     scale_color_manual(drop=FALSE, values=c("#e87d72","#56bcc2"), breaks = c(0, 1), labels = c('Pre','Post')) +
-    labs(x = xlab, y = ylab, title = title)
+    labs(x = xlab, y = ylab, title = title, caption = cap_text)
 
   if (!is.null(ref_line)) {
     p <- p + geom_vline(aes(xintercept = ref_line), linetype = 'dashed')
@@ -97,7 +99,9 @@ splot <- function(ssresults, ylim=NULL, xlab=NULL, ylab=NULL, title="Group",
     p <- p + ggpubr::theme_pubr() +
       theme(plot.title = element_text(color="darkgray", face="bold", size=12),
             axis.title = element_text(color="darkgray", face="bold", size=12),
-            legend.position = 'none')
+            legend.position = 'none',
+            axis.text = element_text(size=lab_size)) + 
+            theme(plot.caption = element_text(hjust=0.5))
   }
 
   if (!legend) {
