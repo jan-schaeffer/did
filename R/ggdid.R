@@ -54,7 +54,7 @@ ggdid.MP <- function(object,
                      xlab=NULL,
                      ylab=NULL,
                      lab_size=10,
-                     title="Group",
+                     #title="Group",
                      cap_text=NULL,
                      xgap=1,
                      ncol=1,
@@ -92,9 +92,13 @@ ggdid.MP <- function(object,
   }
 
   mplots <- gplot(results[results$group %in% group,],
-                  ylim, xlab, ylab, lab_size, title, cap_text, xgap,
+                  ylim, xlab, ylab, lab_size, cap_text, xgap,
                   legend, ref_line, theming) +
-    facet_wrap(~grtitle, ncol = ncol, scales = 'free')
+    facet_wrap(~grtitle, ncol = ncol, scales = 'free') +
+  theme(
+  strip.background = element_blank(),
+  strip.text.x = element_blank()
+)
 
   return(mplots)
 }
@@ -112,7 +116,7 @@ ggdid.AGGTEobj <- function(object,
                            xlab=NULL,
                            ylab=NULL,
                            lab_size=10,
-                           title="",
+                           #title="",
                            cap_text=NULL,
                            xgap=1,
                            legend=TRUE,
@@ -131,16 +135,11 @@ ggdid.AGGTEobj <- function(object,
                               post=as.factor(post.treat))
   results$c <- ifelse(is.null(object$crit.val.egt), abs(qnorm(.025)), object$crit.val.egt)
 
-  if (title == "") {
-    # get title right depending on which aggregation
-    title <- ifelse(object$type=="group", "Average Effect by Group", ifelse(object$type=="dynamic", "Average Effect by Length of Exposure", "Average Effect by Time Period"))
-  }
-
   if (object$type == "group") {
     # alternative plot if selective/group treatment timing plot
-    p <- splot(results, ylim, xlab, ylab, lab_size, title, cap_text, legend, ref_line, theming)
+    p <- splot(results, ylim, xlab, ylab, lab_size, cap_text, legend, ref_line, theming)
   } else {
-    p <- gplot(results, ylim, xlab, ylab, lab_size, title, cap_text, xgap, legend, ref_line, theming)
+    p <- gplot(results, ylim, xlab, ylab, lab_size, cap_text, xgap, legend, ref_line, theming)
   }
 
   p
